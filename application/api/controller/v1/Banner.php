@@ -8,6 +8,7 @@
 
 namespace app\api\controller\v1;
 
+use app\api\validate\IDMustBePostiveInt;
 use think\Validate;
 
 class Banner
@@ -20,18 +21,20 @@ class Banner
      */
     public function getBanner($id)
     {
-        //独立验证
+        //验证器
         $data = [
-            'name' => 'lisi',
-            'email' => 'lw.588@163.com'
+            'id' => $id
         ];
-        $validate = new Validate([
-            'name' => 'require|max:10',
-            'email' => 'email'
-        ]);
+
+        $validate = new IDMustBePostiveInt();
+
         $result = $validate -> batch() -> check($data);
-        $error = $validate -> getError();
-        var_dump($error);
+
+        if ($result) {
+            echo $id;
+        } else {
+            echo $validate -> getError()['id'];
+        }
     }
 
 }
